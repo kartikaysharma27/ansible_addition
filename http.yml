@@ -1,0 +1,37 @@
+---
+ - name: Install and start apache
+   hosts: localhost
+   become: yes
+   vars:
+     http_port: 80
+
+   tasks:
+   - name: Install httpd packages
+     yum: 
+       name: httpd
+       state: latest 
+   - name: configuring file
+     blockinfile: 
+       path: /etc/httpd/conf.d/web.conf
+       create: yes
+       block: |
+         <Directory /var/www/html>
+          Require all granted
+         </Directory>
+         <VirtualHost *:80> 
+          ServerName server1.example.com
+          DocumentRoot /var/www/html
+         </VirtualHost> 
+
+   - name: index file
+     blockinfile:
+       path: /var/www/html/index.html
+       create: yes 
+       block: |
+         hello everyone 
+
+   - name: httpd is started
+     service:
+       name: httpd
+       state: restarted
+

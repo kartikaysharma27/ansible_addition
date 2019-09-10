@@ -1,0 +1,6 @@
+---
+- name: addition of two number in ansible
+  hosts: localhost
+  tasks:
+  - debug:
+      msg: "addition{{4+4}}"
